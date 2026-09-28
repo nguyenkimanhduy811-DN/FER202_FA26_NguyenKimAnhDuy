@@ -1,9 +1,9 @@
-import Counter from './components/Counter';
+import ControlledInput from './components/ControlledInput';
 
 function App() {
   return (
-    <div className="container mt-5">
-      <Counter />
+    <div className="container py-5">
+      <ControlledInput />
     </div>
   );
 }
