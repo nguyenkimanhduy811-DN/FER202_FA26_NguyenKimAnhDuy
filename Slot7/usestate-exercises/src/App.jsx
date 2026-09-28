@@ -1,9 +1,9 @@
-import ControlledInput from './components/ControlledInput';
+import ToggleVisibility from './components/ToggleVisibility';
 
 function App() {
   return (
     <div className="container py-5">
-      <ControlledInput />
+      <ToggleVisibility />
     </div>
   );
 }
