@@ -1,7 +1,7 @@
-import FaqAccordion from './usestate/FaqAccordion';
+import ReviewForm from './usestate/ReviewForm';
 
 function App() {
-  return <FaqAccordion />;
+  return <ReviewForm />;
 }
 
 export default App;
