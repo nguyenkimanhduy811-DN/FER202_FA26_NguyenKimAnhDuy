@@ -1,7 +1,7 @@
-import StudentManager from './usestate/StudentManager';
+import QuizApp from './usestate/QuizApp';
 
 function App() {
-  return <StudentManager />;
+  return <QuizApp />;
 }
 
 export default App;
