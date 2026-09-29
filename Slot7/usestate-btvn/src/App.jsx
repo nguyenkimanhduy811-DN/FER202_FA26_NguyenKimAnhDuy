@@ -1,7 +1,7 @@
-import BmiCalculator from './usestate/BmiCalculator';
+import StudentManager from './usestate/StudentManager';
 
 function App() {
-  return <BmiCalculator />;
+  return <StudentManager />;
 }
 
 export default App;

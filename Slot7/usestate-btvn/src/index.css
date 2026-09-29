@@ -544,3 +544,384 @@ body {
     font-size: 16px;
   }
 }
+
+
+
+
+/* =========================================
+   GLOBAL
+========================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family:
+    Inter,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+  background: #f4f7fb;
+  color: #212529;
+}
+
+/* =========================================
+   PAGE
+========================================= */
+
+.student-page {
+  min-height: 100vh;
+  padding: 55px 20px 80px;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(13, 110, 253, 0.07),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      #f8fafc 0%,
+      #eef3f8 100%
+    );
+}
+
+.student-container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+/* =========================================
+   TITLE
+========================================= */
+
+.student-container > h1 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.student-container > p {
+  margin-top: 8px !important;
+  color: #7a8491 !important;
+  font-size: 14px;
+}
+
+/* =========================================
+   CARD
+========================================= */
+
+.student-container .card {
+  border: 0;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow:
+    0 8px 25px rgba(31, 41, 55, 0.06),
+    0 2px 7px rgba(31, 41, 55, 0.04);
+}
+
+/* =========================================
+   ADD STUDENT
+========================================= */
+
+.student-add-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.student-add-row .form-control {
+  min-height: 44px;
+  flex: 1;
+  border: 1px solid #dfe5ec;
+  border-radius: 10px;
+  background: #fbfcfe;
+  padding: 9px 13px;
+  font-size: 14px;
+  box-shadow: none;
+}
+
+.student-add-row .form-control:focus {
+  border-color: #86b7fe;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 4px rgba(13, 110, 253, 0.07);
+}
+
+.student-add-row .btn {
+  min-width: 90px;
+  min-height: 44px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.student-add-row .btn:disabled {
+  opacity: 0.5;
+}
+
+/* =========================================
+   TOOLBAR
+========================================= */
+
+.student-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 16px;
+}
+
+.student-toolbar .form-select {
+  width: 270px;
+  min-height: 42px;
+  border: 1px solid #dfe5ec;
+  border-radius: 10px;
+  background-color: #ffffff;
+  font-size: 13px;
+  box-shadow: none;
+}
+
+.student-toolbar .form-select:focus {
+  border-color: #86b7fe;
+  box-shadow:
+    0 0 0 4px rgba(13, 110, 253, 0.07);
+}
+
+.student-toolbar .btn {
+  min-height: 42px;
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* =========================================
+   TABLE WRAPPER
+========================================= */
+
+.student-container .card:has(.student-table) {
+  overflow: hidden;
+}
+
+/* =========================================
+   TABLE
+========================================= */
+
+.student-table {
+  margin: 0;
+  font-size: 13px;
+}
+
+.student-table thead th {
+  height: 52px;
+  padding: 12px 15px;
+  vertical-align: middle;
+  border: none;
+  background: #f7f9fc;
+  color: #616b78;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.student-table tbody td {
+  height: 65px;
+  padding: 10px 15px;
+  vertical-align: middle;
+  border-color: #edf0f4;
+  background: #ffffff;
+}
+
+.student-table tbody tr:hover td {
+  background: #f9fbfd;
+}
+
+/* =========================================
+   STUDENT NAME
+========================================= */
+
+.student-name {
+  color: #252d38;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* =========================================
+   SCORE INPUT
+========================================= */
+
+.student-table .score-input {
+  width: 82px;
+  min-height: 38px;
+  margin: 0 auto;
+  border: 1px solid #dfe5ec;
+  border-radius: 9px;
+  background: #fbfcfe;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.student-table .score-input:focus {
+  border-color: #86b7fe;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 4px rgba(13, 110, 253, 0.07);
+}
+
+/* =========================================
+   CITY SELECT
+========================================= */
+
+.student-table .form-select {
+  min-width: 125px;
+  min-height: 38px;
+  border: 1px solid #dfe5ec;
+  border-radius: 9px;
+  background-color: #fbfcfe;
+  font-size: 12px;
+  box-shadow: none;
+}
+
+.student-table .form-select:focus {
+  border-color: #86b7fe;
+  box-shadow:
+    0 0 0 4px rgba(13, 110, 253, 0.07);
+}
+
+/* =========================================
+   BADGE
+========================================= */
+
+.student-table .badge {
+  padding: 7px 11px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* =========================================
+   DELETE BUTTON
+========================================= */
+
+.student-table .btn {
+  min-width: 58px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* =========================================
+   SUMMARY
+========================================= */
+
+.student-container .student-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  padding: 20px;
+}
+
+.student-summary span {
+  padding: 16px 18px;
+  border: 1px solid #edf0f4;
+  border-radius: 12px;
+  background: #f9fbfd;
+  color: #707985;
+  font-size: 13px;
+}
+
+.student-summary strong {
+  display: block;
+  margin-top: 5px;
+  color: #1f2937;
+  font-size: 19px;
+}
+
+/* =========================================
+   EMPTY TABLE
+========================================= */
+
+.student-table tbody td.text-muted {
+  height: 120px;
+  color: #9aa3af !important;
+  font-size: 13px;
+}
+
+/* =========================================
+   FORM HELPERS
+========================================= */
+
+.form-control::placeholder {
+  color: #a4acb7;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+  .student-container {
+    max-width: 100%;
+  }
+
+  .student-table {
+    min-width: 850px;
+  }
+
+  .student-container .card:has(.student-table) {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .student-page {
+    padding: 35px 15px 55px;
+  }
+
+  .student-container > h1 {
+    font-size: 28px;
+  }
+
+  .student-add-row {
+    flex-direction: column;
+  }
+
+  .student-add-row .form-control,
+  .student-add-row .btn {
+    width: 100%;
+  }
+
+  .student-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .student-toolbar .form-select {
+    width: 100%;
+  }
+
+  .student-toolbar .btn {
+    width: 100%;
+  }
+
+  .student-container .student-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .student-summary span {
+    padding: 14px 16px;
+  }
+}
