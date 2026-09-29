@@ -1,7 +1,7 @@
-import ReviewForm from './usestate/ReviewForm';
+import BmiCalculator from './usestate/BmiCalculator';
 
 function App() {
-  return <ReviewForm />;
+  return <BmiCalculator />;
 }
 
 export default App;
