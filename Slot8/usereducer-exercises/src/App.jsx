@@ -1,7 +1,7 @@
-import OrderTracker from './usereducer/OrderTracker';
+import KanbanBoard from './usereducer/KanbanBoard';
 
 function App() {
-  return <OrderTracker />;
+  return <KanbanBoard />;
 }
 
 export default App;

@@ -473,3 +473,271 @@ body {
     gap: 4px;
   }
 }
+
+
+
+
+
+
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f6f8;
+  color: #212529;
+}
+
+/* =========================
+   KANBAN PAGE
+========================= */
+
+.kanban-page {
+  min-height: 100vh;
+  padding: 45px 20px 60px;
+  background: #f5f6f8;
+}
+
+.kanban-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* =========================
+   TITLE
+========================= */
+
+.kanban-heading {
+  margin-bottom: 25px;
+}
+
+.kanban-heading h1 {
+  margin: 0 0 6px;
+  color: #212529;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.kanban-heading p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.toolbar-card {
+  border: none;
+  border-radius: 10px;
+}
+
+.toolbar-row {
+  display: grid;
+  grid-template-columns: 1fr 180px 90px;
+  gap: 10px;
+}
+
+.toolbar-row .form-control,
+.toolbar-row .form-select {
+  min-height: 42px;
+  border-radius: 8px;
+}
+
+.toolbar-row .btn {
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.toolbar-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.toolbar-bottom .form-select {
+  width: 230px;
+  min-height: 40px;
+  border-radius: 8px;
+}
+
+.toolbar-bottom .btn {
+  min-height: 40px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* =========================
+   KANBAN COLUMNS
+========================= */
+
+.kanban-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.kanban-column {
+  min-height: 430px;
+  padding: 15px;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  background: #e9ecef;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #d8dde2;
+}
+
+.column-title {
+  color: #343a40;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.column-header .badge {
+  min-width: 28px;
+  padding: 6px 8px;
+  border-radius: 15px;
+}
+
+/* =========================
+   TASK CARD
+========================= */
+
+.column-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-card {
+  border: 1px solid #dee2e6;
+  border-radius: 9px;
+  background: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.task-card .card-body {
+  padding: 14px;
+}
+
+.task-title {
+  min-height: 40px;
+  color: #212529;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.task-title:hover {
+  color: #0d6efd;
+}
+
+.task-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.task-info .badge {
+  padding: 6px 9px;
+  border-radius: 12px;
+  font-size: 10px;
+}
+
+.task-info .btn {
+  padding: 5px 9px;
+  border-radius: 7px;
+  font-size: 11px;
+}
+
+.task-move-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.task-move-buttons .btn {
+  width: 38px;
+  height: 34px;
+  padding: 0;
+  border-radius: 7px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* =========================
+   EMPTY COLUMN
+========================= */
+
+.empty-column {
+  padding: 35px 10px;
+  border: 1px dashed #c7cdd3;
+  border-radius: 8px;
+  background: #f8f9fa;
+  color: #868e96;
+  text-align: center;
+  font-size: 13px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .toolbar-row {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar-bottom {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .toolbar-bottom .form-select {
+    width: 100%;
+  }
+
+  .toolbar-bottom .btn {
+    width: 100%;
+  }
+
+  .kanban-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .kanban-column {
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 500px) {
+  .kanban-page {
+    padding: 30px 15px 45px;
+  }
+
+  .kanban-heading h1 {
+    font-size: 27px;
+  }
+
+  .kanban-heading p {
+    font-size: 13px;
+  }
+}
