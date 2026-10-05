@@ -424,3 +424,52 @@ footer.box {
     width: 100%;
   }
 }
+
+
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 15px;
+  background: #f4f6f8;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 430px;
+  border: none;
+  border-radius: 12px;
+}
+
+.auth-title {
+  margin-bottom: 8px;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.auth-card .form-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.auth-card .form-control {
+  min-height: 42px;
+  border-radius: 8px;
+}
+
+.auth-card .btn {
+  min-height: 42px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.login-demo {
+  padding: 13px 15px;
+  border-radius: 8px;
+  background: #f8f9fa;
+  color: #6c757d;
+  font-size: 13px;
+  line-height: 1.7;
+}
