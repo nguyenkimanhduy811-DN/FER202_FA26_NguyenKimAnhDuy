@@ -258,6 +258,7 @@ footer.box {
   transition: 0.3s;
 }
 
+
 .light {
   background: #ffffff;
   color: #222;
@@ -268,4 +269,40 @@ footer.box {
   background: #222;
   color: #f5f5f5;
   border: 1px solid #444;
+}
+
+
+
+
+
+.product-list {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.product-card {
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+}
+
+.product-card .card-title {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.product-card .btn {
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
 }
