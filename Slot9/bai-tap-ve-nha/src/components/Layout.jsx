@@ -1,21 +1,26 @@
-import Container from 'react-bootstrap/Container';
-
 import Header from './Header';
 import { useTheme } from '../context/ThemeContext';
 
-function Layout({ children }) {
+function Layout({
+  children,
+  currentPage,
+  onNavigate
+}) {
   const { theme } = useTheme();
 
   return (
     <div
       data-bs-theme={theme}
-      className="bg-body text-body min-vh-100"
+      className="app-theme bg-body text-body min-vh-100"
     >
-      <Header />
+      <Header
+        currentPage={currentPage}
+        onNavigate={onNavigate}
+      />
 
-      <Container className="py-4">
+      <main className="app-content">
         {children}
-      </Container>
+      </main>
     </div>
   );
 }

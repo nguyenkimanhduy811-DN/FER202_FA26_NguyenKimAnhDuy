@@ -3,7 +3,7 @@ export const products = [
     id: 1,
     name: 'Tai nghe Bluetooth',
     price: 590000,
-    discount: 10,
+    salePrice: 531000,
     stock: 8,
     category: {
       name: 'Âm thanh'
@@ -17,6 +17,7 @@ export const products = [
     id: 2,
     name: 'Chuột không dây',
     price: 320000,
+    salePrice: 250000,
     stock: 15,
     category: {
       name: 'Phụ kiện'
@@ -30,6 +31,7 @@ export const products = [
     id: 3,
     name: 'Webcam Full HD',
     price: 990000,
+    salePrice: 780000,
     stock: 6,
     category: {
       name: 'Phụ kiện'
@@ -56,7 +58,7 @@ export const products = [
     id: 5,
     name: 'Màn hình 24 inch',
     price: 3490000,
-    discount: 15,
+    salePrice: 2966500,
     stock: 4,
     category: {
       name: 'Màn hình'
@@ -94,11 +96,11 @@ export const products = [
   },
   {
     id: 8,
-    name: 'Balo laptop',
-    price: 450000,
-    stock: 10,
+    name: 'Bút cảm ứng',
+    price: 680000,
+    stock: 5,
     category: {
-      name: 'Phụ kiện khác'
+      name: 'Thiết bị nhập'
     },
     rating: {
       rate: 4.3,

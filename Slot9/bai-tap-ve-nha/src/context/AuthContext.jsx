@@ -10,12 +10,10 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
   const login = (email) => {
-    const newUser = {
+    setUser({
       email,
       name: email.split('@')[0]
-    };
-
-    setUser(newUser);
+    });
   };
 
   const logout = () => {
