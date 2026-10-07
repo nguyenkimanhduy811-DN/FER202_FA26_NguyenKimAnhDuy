@@ -473,3 +473,70 @@ body {
     width: 100%;
   }
 }
+
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f6f8;
+  color: #212529;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 15px;
+  background: #f5f6f8;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 430px;
+  border: none;
+  border-radius: 10px;
+}
+
+.login-heading {
+  margin-bottom: 22px;
+  text-align: center;
+}
+
+.login-heading h1 {
+  margin: 0 0 6px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.login-heading p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.login-card .form-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.login-card .form-control {
+  min-height: 42px;
+  border-radius: 7px;
+}
+
+.login-card .btn {
+  min-height: 42px;
+  border-radius: 7px;
+  font-weight: 600;
+}
+
+.demo-account {
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 7px;
+  background: #f8f9fa;
+  color: #6c757d;
+  font-size: 12px;
+  line-height: 1.7;
+}
