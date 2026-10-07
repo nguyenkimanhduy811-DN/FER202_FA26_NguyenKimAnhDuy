@@ -1,16 +1,20 @@
 import './App.css';
 
-import LoginForm from './components/LoginForm';
+import { ThemeProvider } from './context/ThemeContext';
+import { AuthProvider } from './context/AuthContext';
+
+import Layout from './components/Layout';
+import HomeContent from './components/HomeContent';
 
 function App() {
-  const handleLoginSuccess = (user) => {
-    console.log('Login success:', user);
-  };
-
   return (
-    <LoginForm
-      onLoginSuccess={handleLoginSuccess}
-    />
+    <ThemeProvider>
+      <AuthProvider>
+        <Layout>
+          <HomeContent />
+        </Layout>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

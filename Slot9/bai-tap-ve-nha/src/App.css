@@ -540,3 +540,37 @@ body {
   font-size: 12px;
   line-height: 1.7;
 }
+
+
+
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-greeting {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.home-login {
+  max-width: 430px;
+  margin: 30px auto;
+}
+
+.home-card {
+  max-width: 700px;
+  margin: 40px auto;
+  border-radius: 10px;
+}
+
+.home-card h2 {
+  margin-bottom: 10px;
+}
