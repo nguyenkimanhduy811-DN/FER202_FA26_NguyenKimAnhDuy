@@ -67,3 +67,92 @@ body {
   font-size: 12px;
   white-space: pre-wrap;
 }
+
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f6f8;
+  color: #212529;
+}
+
+.validated-register-page {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #f5f6f8;
+}
+
+.validated-register-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.validated-register-heading {
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.validated-register-heading h1 {
+  margin-bottom: 6px;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.validated-register-heading p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.validated-register-card {
+  border: none;
+  border-radius: 10px;
+}
+
+.validated-register-card .form-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.validated-register-card .form-control,
+.validated-register-card .form-select {
+  border-radius: 7px;
+}
+
+.validated-register-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.validated-register-actions .btn {
+  min-width: 110px;
+  border-radius: 7px;
+  font-weight: 600;
+}
+
+.validation-status {
+  color: #dc3545;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.validation-status.valid {
+  color: #198754;
+}
+
+@media (max-width: 600px) {
+  .validated-register-page {
+    padding: 25px 15px;
+  }
+
+  .validated-register-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .validated-register-actions .btn {
+    width: 100%;
+  }
+}

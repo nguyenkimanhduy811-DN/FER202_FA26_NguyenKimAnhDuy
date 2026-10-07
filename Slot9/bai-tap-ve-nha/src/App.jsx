@@ -1,9 +1,9 @@
 import './App.css';
 
-import RegisterForm from './components/RegisterForm';
+import ValidatedRegisterForm from './components/ValidatedRegisterForm';
 
 function App() {
-  return <RegisterForm />;
+  return <ValidatedRegisterForm />;
 }
 
 export default App;
