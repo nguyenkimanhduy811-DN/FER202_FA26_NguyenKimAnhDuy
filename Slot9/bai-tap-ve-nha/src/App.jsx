@@ -1,18 +1,9 @@
-import ProductFilter from './components/ProductFilter';
-import { products } from './data/products';
 import './App.css';
 
-function App() {
-  const handleAddToCart = (product) => {
-    console.log('Add to cart:', product);
-  };
+import RegisterForm from './components/RegisterForm';
 
-  return (
-    <ProductFilter
-      products={products}
-      onAddToCart={handleAddToCart}
-    />
-  );
+function App() {
+  return <RegisterForm />;
 }
 
 export default App;
