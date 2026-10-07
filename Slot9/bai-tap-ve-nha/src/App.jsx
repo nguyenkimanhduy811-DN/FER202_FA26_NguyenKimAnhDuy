@@ -1,8 +1,18 @@
+import ProductFilter from './components/ProductFilter';
+import { products } from './data/products';
 import './App.css';
-import ProfilePreview from './components/ProfilePreview';
 
 function App() {
-  return <ProfilePreview />;
+  const handleAddToCart = (product) => {
+    console.log('Add to cart:', product);
+  };
+
+  return (
+    <ProductFilter
+      products={products}
+      onAddToCart={handleAddToCart}
+    />
+  );
 }
 
 export default App;
