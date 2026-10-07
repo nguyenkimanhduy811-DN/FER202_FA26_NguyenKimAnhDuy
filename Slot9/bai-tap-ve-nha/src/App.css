@@ -156,3 +156,160 @@ body {
     width: 100%;
   }
 }
+
+
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f6f8;
+  color: #212529;
+}
+
+.todo-page {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #f5f6f8;
+}
+
+.todo-container {
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.todo-card {
+  border: none;
+  border-radius: 10px;
+}
+
+.todo-heading {
+  margin-bottom: 22px;
+}
+
+.todo-heading h1 {
+  margin: 0 0 5px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.todo-heading p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.todo-add-row {
+  display: grid;
+  grid-template-columns: 1fr 90px;
+  gap: 10px;
+}
+
+.todo-add-row .form-control {
+  min-height: 42px;
+  border-radius: 7px;
+}
+
+.todo-add-row .btn {
+  border-radius: 7px;
+}
+
+.todo-error {
+  margin-top: 6px;
+  color: #dc3545;
+  font-size: 13px;
+}
+
+.todo-filter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 7px;
+}
+
+.todo-remaining {
+  margin: 18px 0 12px;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #e0e4e8;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.todo-item .form-check {
+  margin: 0;
+}
+
+.todo-content {
+  flex: 1;
+}
+
+.todo-title {
+  display: block;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.todo-title.done {
+  color: #6c757d;
+  text-decoration: line-through;
+}
+
+.todo-item > .btn {
+  flex-shrink: 0;
+}
+
+.todo-empty {
+  padding: 30px;
+  border: 1px dashed #ced4da;
+  border-radius: 8px;
+  color: #6c757d;
+  text-align: center;
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .todo-page {
+    padding: 25px 15px;
+  }
+
+  .todo-add-row {
+    grid-template-columns: 1fr;
+  }
+
+  .todo-filter-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-buttons {
+    flex-wrap: wrap;
+  }
+
+  .filter-buttons .btn {
+    flex: 1;
+  }
+
+  .todo-item {
+    align-items: flex-start;
+  }
+}

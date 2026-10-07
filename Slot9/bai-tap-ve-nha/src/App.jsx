@@ -1,9 +1,9 @@
 import './App.css';
 
-import ValidatedRegisterForm from './components/ValidatedRegisterForm';
+import TodoList from './components/TodoList';
 
 function App() {
-  return <ValidatedRegisterForm />;
+  return <TodoList />;
 }
 
 export default App;
