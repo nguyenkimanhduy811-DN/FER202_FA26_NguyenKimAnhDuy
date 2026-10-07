@@ -1,9 +1,9 @@
 import './App.css';
 
-import TodoList from './components/TodoList';
+import CartDemoPage from './pages/CartDemoPage';
 
 function App() {
-  return <TodoList />;
+  return <CartDemoPage />;
 }
 
 export default App;

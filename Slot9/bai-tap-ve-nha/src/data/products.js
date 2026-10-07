@@ -3,7 +3,7 @@ export const products = [
     id: 1,
     name: 'Tai nghe Bluetooth',
     price: 590000,
-    salePrice: 550000,
+    discount: 10,
     stock: 8,
     category: {
       name: 'Âm thanh'
@@ -56,7 +56,7 @@ export const products = [
     id: 5,
     name: 'Màn hình 24 inch',
     price: 3490000,
-    salePrice: 3290000,
+    discount: 15,
     stock: 4,
     category: {
       name: 'Màn hình'
