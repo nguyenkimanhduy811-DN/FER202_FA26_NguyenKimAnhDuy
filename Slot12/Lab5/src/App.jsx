@@ -2,6 +2,9 @@ import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 
+
+import MyCarousel from "./components/MyCarousel";
+
 import Home from "./pages/Home";
 import About from "./pages/About";
 import News from "./pages/News";
@@ -13,7 +16,7 @@ function App() {
   return (
     <>
       <Navbar />
-
+         <MyCarousel />
       <main className="container py-4">
         <Routes>
           <Route path="/" element={<Home />} />
