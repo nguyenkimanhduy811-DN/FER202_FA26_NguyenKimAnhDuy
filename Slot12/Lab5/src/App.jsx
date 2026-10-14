@@ -1,10 +1,28 @@
-import { Container } from "react-bootstrap";
+import { Routes, Route } from "react-router-dom";
+
+import Navbar from "./components/Navbar";
+
+import Home from "./pages/Home";
+import About from "./pages/About";
+import News from "./pages/News";
+import Contact from "./pages/Contact";
+
+import "./App.css";
 
 function App() {
   return (
-    <Container className="py-4">
-      <h1 className="text-primary fw-bold">Lab5</h1>
-    </Container>
+    <>
+      <Navbar />
+
+      <main className="container py-4">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/new" element={<News />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </main>
+    </>
   );
 }
 
