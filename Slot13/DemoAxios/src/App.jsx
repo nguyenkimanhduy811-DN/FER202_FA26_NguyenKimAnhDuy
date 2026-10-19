@@ -1,14 +1,7 @@
-import { Container } from "react-bootstrap";
-import "./App.css";
+import AxiosDemo from "./components/AxiosDemo";
 
 function App() {
-  return (
-    <Container className="py-4">
-      <h1 className="text-primary fw-bold">
-        DemoAxios
-      </h1>
-    </Container>
-  );
+  return <AxiosDemo />;
 }
 
 export default App;
