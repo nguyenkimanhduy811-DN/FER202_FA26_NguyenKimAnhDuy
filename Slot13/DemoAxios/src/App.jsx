@@ -1,7 +1,8 @@
-import PostList from "./components/PostList";
+import AxiosDemo from "./components/AxiosDemo";
+import CreatePost from "./components/CreatePost";
 
 function App() {
-  return <PostList />;
+  return <CreatePost />;
 }
 
 export default App;

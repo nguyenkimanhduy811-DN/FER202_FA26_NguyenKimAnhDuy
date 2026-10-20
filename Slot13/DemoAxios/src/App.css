@@ -182,3 +182,11 @@
     border-right-color: var(--border);
   }
 }
+
+
+.response-json {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 0.9rem;
+  color: #212529;
+}
