@@ -1,29 +1,48 @@
+
 import AxiosDemo from "./components/AxiosDemo";
 import PostList from "./components/PostList";
 import CreatePost from "./components/CreatePost";
 import UpdatePost from "./components/UpdatePost";
 import PatchPost from "./components/PatchPost";
 import DeletePost from "./components/DeletePost";
+import RequestConfig from "./components/RequestConfig";
+
+import "./App.css";
 
 function App() {
   return (
-    <>
-      
+    <div className="axios-app">
+      <header className="text-center py-4 bg-primary text-white">
+        <h1 className="fw-bold">DemoAxios</h1>
+        <p className="mb-0">
+          Thực hành HTTP requests với React và Axios
+        </p>
+      </header>
+
+      <AxiosDemo />
+      <hr className="section-divider" />
 
       <PostList />
-      <hr />
+      <hr className="section-divider" />
 
       <CreatePost />
-      <hr />
+      <hr className="section-divider" />
 
       <UpdatePost />
-      <hr />
+      <hr className="section-divider" />
 
       <PatchPost />
-      <hr />
+      <hr className="section-divider" />
 
       <DeletePost />
-    </>
+      <hr className="section-divider" />
+
+      <RequestConfig />
+
+      <footer className="text-center py-4 text-muted">
+        Exercise 27 — Axios Demo
+      </footer>
+    </div>
   );
 }
 
