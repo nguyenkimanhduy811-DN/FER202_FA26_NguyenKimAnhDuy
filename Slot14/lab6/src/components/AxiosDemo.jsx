@@ -1,32 +1,34 @@
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Alert, Card, Container, Spinner } from "react-bootstrap";
 
 function AxiosDemo() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios
-      .get("https://jsonplaceholder.typicode.com/posts")
-      .then((response) => {
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts/1"
+        );
+
         setData(response.data);
-      })
-      .catch((error) => {
-        setError(error.message);
-      })
-      .finally(() => {
+      } catch (err) {
+        setError(err.message);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchPost();
   }, []);
 
   if (loading) {
     return (
-      <Container className="py-4 text-center">
-        <Spinner animation="border" variant="primary" />
-        <p className="mt-2">Đang tải danh sách bài viết...</p>
+      <Container className="py-4">
+        <Spinner animation="border" size="sm" /> Loading...
       </Container>
     );
   }
@@ -34,42 +36,20 @@ function AxiosDemo() {
   if (error) {
     return (
       <Container className="py-4">
-        <Alert variant="danger">
-          Lỗi khi tải danh sách bài viết: {error}
-        </Alert>
+        <Alert variant="danger">Error: {error}</Alert>
       </Container>
     );
   }
 
   return (
     <Container className="py-4">
-      <h1 className="text-primary fw-bold mb-4">
-        Danh sách bài viết
-      </h1>
-
-      <p className="text-muted">
-        Tổng số bài viết: {data.length}
-      </p>
-
-      <div className="row g-4">
-        {data.map((post) => (
-          <div className="col-12 col-md-6 col-lg-4" key={post.id}>
-            <Card className="h-100 shadow-sm">
-              <Card.Body>
-                <Card.Subtitle className="text-primary mb-2">
-                  Bài viết #{post.id}
-                </Card.Subtitle>
-
-                <Card.Title className="text-capitalize">
-                  {post.title}
-                </Card.Title>
-
-                <Card.Text>{post.body}</Card.Text>
-              </Card.Body>
-            </Card>
-          </div>
-        ))}
-      </div>
+      <h2>Axios Demo</h2>
+      <Card>
+        <Card.Body>
+          <Card.Title>{data.title}</Card.Title>
+          <Card.Text>{data.body}</Card.Text>
+        </Card.Body>
+      </Card>
     </Container>
   );
 }

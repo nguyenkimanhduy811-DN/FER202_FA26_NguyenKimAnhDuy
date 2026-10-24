@@ -13,7 +13,9 @@ function App() {
     <div className="axios-app">
       <header className="text-center py-4 bg-primary text-white">
         <h1 className="fw-bold">Exercise 27 - DemoAxios</h1>
-        <p className="mb-0">Thực hành HTTP requests với Axios</p>
+        <p className="mb-0">
+          TODO 1 – Async/Await
+        </p>
       </header>
 
       <AxiosDemo />
@@ -37,7 +39,7 @@ function App() {
       <RequestConfig />
 
       <footer className="text-center py-4 text-muted">
-        Exercise 27 — Phần 1 và Phần 2
+        Exercise 27 — TODO 1
       </footer>
     </div>
   );

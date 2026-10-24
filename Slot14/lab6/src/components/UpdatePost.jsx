@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -19,22 +18,21 @@ function UpdatePost() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // 1. GET bài viết số 1 khi component được mount.
   useEffect(() => {
-    axios
-      .get(URL)
-      .then((response) => {
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(URL);
         setPost(response.data);
-      })
-      .catch((error) => {
-        setError(error.message);
-      })
-      .finally(() => {
+      } catch (err) {
+        setError(err.message);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchPost();
   }, []);
 
-  // 2. PUT toàn bộ bài viết sau khi người dùng chỉnh sửa.
   const handleUpdate = async () => {
     if (!post) return;
 
@@ -54,8 +52,8 @@ function UpdatePost() {
         status: response.status,
         data: response.data,
       });
-    } catch (error) {
-      setError(error.message);
+    } catch (err) {
+      setError(err.message);
     } finally {
       setSaving(false);
     }
@@ -63,9 +61,8 @@ function UpdatePost() {
 
   if (loading) {
     return (
-      <Container className="py-4 text-center">
-        <Spinner animation="border" variant="primary" />
-        <p className="mt-2">Đang tải bài viết...</p>
+      <Container className="py-4">
+        <Spinner animation="border" size="sm" /> Loading...
       </Container>
     );
   }
@@ -82,60 +79,46 @@ function UpdatePost() {
 
   return (
     <Container className="py-4">
-      <h2 className="text-primary fw-bold mb-3">
-        Bài 2.3 – PUT cập nhật bài viết
-      </h2>
+      <h2>PUT – Cập nhật bài viết #{post.id}</h2>
 
-      <Card className="shadow-sm">
-        <Card.Body className="p-4">
-          <p className="text-muted">
-            Chỉnh sửa tiêu đề và nội dung bài viết #{post.id}.
-          </p>
-
-          <Form.Group className="mb-3" controlId="updatePostTitle">
+      <Card>
+        <Card.Body>
+          <Form.Group className="mb-3">
             <Form.Label>Title</Form.Label>
             <Form.Control
-              type="text"
               value={post.title}
-              onChange={(e) => {
-                setPost({ ...post, title: e.target.value });
-                setResult(null);
-              }}
+              onChange={(e) =>
+                setPost({ ...post, title: e.target.value })
+              }
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="updatePostBody">
+          <Form.Group className="mb-3">
             <Form.Label>Body</Form.Label>
             <Form.Control
               as="textarea"
               rows={4}
               value={post.body}
-              onChange={(e) => {
-                setPost({ ...post, body: e.target.value });
-                setResult(null);
-              }}
+              onChange={(e) =>
+                setPost({ ...post, body: e.target.value })
+              }
             />
           </Form.Group>
 
-          <Button
-            variant="primary"
-            onClick={handleUpdate}
-            disabled={saving}
-          >
-            {saving ? "Đang cập nhật..." : "Cập nhật (PUT)"}
+          <Button onClick={handleUpdate} disabled={saving}>
+            {saving ? "Đang lưu..." : "Cập nhật (PUT)"}
           </Button>
 
           {error && (
             <Alert variant="danger" className="mt-3">
-              Lỗi khi cập nhật: {error}
+              Error: {error}
             </Alert>
           )}
 
           {result && (
-            <Alert variant="success" className="mt-4 mb-0">
-              <h5>Cập nhật thành công!</h5>
+            <Alert variant="success" className="mt-3">
               <p>Status: {result.status}</p>
-              <pre className="response-json mb-0">
+              <pre className="response-json">
                 {JSON.stringify(result.data, null, 2)}
               </pre>
             </Alert>

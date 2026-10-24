@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -12,9 +11,10 @@ import {
 function RequestConfig() {
   const [info, setInfo] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchWithConfig = async () => {
       try {
         const response = await axios({
           method: "get",
@@ -36,83 +36,62 @@ function RequestConfig() {
           total: response.headers["x-total-count"],
           data: response.data,
         });
-      } catch (error) {
+      } catch (err) {
         if (
-          error.code === "ECONNABORTED" ||
-          error.code === "ETIMEDOUT"
+          err.code === "ECONNABORTED" ||
+          err.code === "ETIMEDOUT"
         ) {
           setError("Request quá thời gian (timeout).");
-        } else if (error.response) {
-          setError(`Server trả lỗi ${error.response.status}.`);
+        } else if (err.response) {
+          setError(`Server trả lỗi ${err.response.status}.`);
         } else {
-          setError(error.message);
+          setError(err.message);
         }
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchData();
+    fetchWithConfig();
   }, []);
+
+  if (loading) {
+    return (
+      <Container className="py-4">
+        <Spinner animation="border" size="sm" /> Loading...
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container className="py-4">
+        <Alert variant="danger">Error: {error}</Alert>
+      </Container>
+    );
+  }
 
   return (
     <Container className="py-4">
-      <h2 className="text-primary fw-bold mb-3">
-        Bài 2.6 – Cấu hình request
-      </h2>
+      <h2>Cấu hình request</h2>
 
-      <Card className="shadow-sm">
-        <Card.Body className="p-4">
-          {error && (
-            <Alert variant="danger">
-              Lỗi: {error}
-            </Alert>
-          )}
+      <Card>
+        <Card.Body>
+          <p>Status: {info.status}</p>
+          <p>Content-Type: {info.contentType}</p>
+          <p>
+            Tổng số bài viết (x-total-count):{" "}
+            {info.total ?? "Server không cung cấp header này"}
+          </p>
 
-          {!info && !error && (
-            <div className="d-flex align-items-center gap-2">
-              <Spinner animation="border" size="sm" />
-              <span>Đang tải dữ liệu...</span>
-            </div>
-          )}
-
-          {info && (
-            <>
-              <Alert variant="success">
-                Request thành công — Status: {info.status}
-              </Alert>
-
-              <p>
-                <strong>HTTP Status:</strong> {info.status}
-              </p>
-
-              <p>
-                <strong>Content-Type:</strong>{" "}
-                {info.contentType ?? "Không có header"}
-              </p>
-
-              <p>
-                <strong>Tổng số bài viết (x-total-count):</strong>{" "}
-                {info.total ?? "Server không cung cấp header này"}
-              </p>
-
-              <h5 className="mt-4 mb-3">
-                Ba bài viết nhận được
-              </h5>
-
-              <ListGroup>
-                {info.data.map((post) => (
-                  <ListGroup.Item key={post.id}>
-                    <strong>#{post.id}</strong> – {post.title}
-                  </ListGroup.Item>
-                ))}
-              </ListGroup>
-
-              <h5 className="mt-4">Response JSON</h5>
-
-              <pre className="response-json mb-0">
-                {JSON.stringify(info.data, null, 2)}
-              </pre>
-            </>
-          )}
+          <h5>Danh sách bài viết</h5>
+          <ListGroup>
+            {info.data.map((post) => (
+              <ListGroup.Item key={post.id}>
+                #{post.id} – {post.title}
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
         </Card.Body>
       </Card>
     </Container>
