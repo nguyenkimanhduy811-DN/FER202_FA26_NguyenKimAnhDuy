@@ -1,55 +1,48 @@
 
-
-import { Container } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 
 import AxiosDemo from "./components/AxiosDemo";
-import PostList from "./components/PostList";
-import CreatePost from "./components/CreatePost";
-import UpdatePost from "./components/UpdatePost";
-import PatchPost from "./components/PatchPost";
-import DeletePost from "./components/DeletePost";
-import RequestConfig from "./components/RequestConfig";
-import PostDetail from "./PostDetail";
+import PostListCard from "./components/http/PostListCard";
+import CreatePostCard from "./components/http/CreatePostCard";
+import UpdatePostCard from "./components/http/UpdatePostCard";
+import PatchPostCard from "./components/http/PatchPostCard";
+import DeletePostCard from "./components/http/DeletePostCard";
+import RequestConfigCard from "./components/http/RequestConfigCard";
 
-function App() {
+export default function App() {
   return (
-    <div>
-      <header className="bg-dark text-white py-4">
-        <Container>
-          <h1>Axios Demo - TODO 3</h1>
-          <p className="mb-0">
-            Axios Instance, Interceptors, Service và Promise
-          </p>
-        </Container>
-      </header>
+    <Container className="py-4">
+      <AxiosDemo />
 
-      <main>
-        <AxiosDemo />
-        <hr />
+      <h2 className="mt-5 mb-3">
+        HTTP Requests với Axios
+      </h2>
 
-        <PostList />
-        <hr />
+      <Row xs={1} lg={2} className="g-4">
+        <Col>
+          <PostListCard />
+        </Col>
 
-        <CreatePost />
-        <hr />
+        <Col>
+          <CreatePostCard />
+        </Col>
 
-        <UpdatePost />
-        <hr />
+        <Col>
+          <UpdatePostCard />
+        </Col>
 
-        <PatchPost />
-        <hr />
+        <Col>
+          <PatchPostCard />
+        </Col>
 
-        <DeletePost />
-        <hr />
+        <Col>
+          <DeletePostCard />
+        </Col>
 
-        <RequestConfig />
-        <hr />
-
-        <PostDetail postId={1} />
-      </main>
-    </div>
+        <Col>
+          <RequestConfigCard />
+        </Col>
+      </Row>
+    </Container>
   );
 }
-
-export default App;
-
