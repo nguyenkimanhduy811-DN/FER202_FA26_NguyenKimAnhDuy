@@ -1,0 +1,24 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "Học JSON Server",
+      "views": 100
+    },
+    {
+      "id": "2",
+      "title": "Lập trình ReactJS",
+      "views": 250
+    }
+  ],
+  "comments": [
+    {
+      "id": "1",
+      "text": "Bài viết hay quá!",
+      "postId": "1"
+    }
+  ],
+  "profile": {
+    "name": "Dev"
+  }
+}
