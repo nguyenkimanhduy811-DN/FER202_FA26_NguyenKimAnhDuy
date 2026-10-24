@@ -1,4 +1,5 @@
 
+
 import { Container } from "react-bootstrap";
 
 import AxiosDemo from "./components/AxiosDemo";
@@ -8,15 +9,16 @@ import UpdatePost from "./components/UpdatePost";
 import PatchPost from "./components/PatchPost";
 import DeletePost from "./components/DeletePost";
 import RequestConfig from "./components/RequestConfig";
+import PostDetail from "./PostDetail";
 
 function App() {
   return (
     <div>
       <header className="bg-dark text-white py-4">
         <Container>
-          <h1>Axios Demo - TODO 2</h1>
+          <h1>Axios Demo - TODO 3</h1>
           <p className="mb-0">
-            Axios Instance, Interceptors và tầng Service
+            Axios Instance, Interceptors, Service và Promise
           </p>
         </Container>
       </header>
@@ -41,9 +43,13 @@ function App() {
         <hr />
 
         <RequestConfig />
+        <hr />
+
+        <PostDetail postId={1} />
       </main>
     </div>
   );
 }
 
 export default App;
+
