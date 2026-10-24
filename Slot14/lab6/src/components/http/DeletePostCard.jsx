@@ -1,13 +1,13 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useOutletContext } from "react-router-dom";
 import {
   Card,
   ListGroup,
   Button,
-  Toast,
-  ToastContainer,
 } from "react-bootstrap";
+
 import postApi from "../../api/postApi";
 import ConfirmModal from "../ConfirmModal";
 import LoadingSpinner from "../common/LoadingSpinner";
@@ -15,12 +15,13 @@ import ErrorAlert from "../common/ErrorAlert";
 import EmptyState from "../common/EmptyState";
 
 export default function DeletePostCard() {
+  const { notify } = useOutletContext();
+
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [toDelete, setToDelete] = useState(null);
   const [deleting, setDeleting] = useState(false);
-  const [toast, setToast] = useState(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -31,10 +32,14 @@ export default function DeletePostCard() {
           { _limit: 5 },
           controller.signal
         );
+
         setPosts(res.data);
       } catch (err) {
         if (axios.isCancel(err)) return;
-        setError(err.userMessage || "Không thể tải bài viết");
+
+        setError(
+          err.userMessage || "Không thể tải bài viết"
+        );
       } finally {
         if (!controller.signal.aborted) {
           setLoading(false);
@@ -43,11 +48,12 @@ export default function DeletePostCard() {
     };
 
     load();
+
     return () => controller.abort();
   }, []);
 
   const handleDelete = async () => {
-    if (!toDelete) return;
+    if (!toDelete || deleting) return;
 
     setDeleting(true);
 
@@ -58,17 +64,21 @@ export default function DeletePostCard() {
         prev.filter((post) => post.id !== toDelete.id)
       );
 
-      setToast({
-        bg: "success",
-        message: `DELETE /posts/${toDelete.id} → ${res.status}`,
-      });
+      notify(
+        "success",
+        `DELETE /posts/${toDelete.id} → ${res.status}`
+      );
 
       setToDelete(null);
     } catch (err) {
-      setToast({
-        bg: "danger",
-        message: `Xóa thất bại: ${err.userMessage || "Lỗi không xác định"}`,
-      });
+      notify(
+        "danger",
+        `Xóa thất bại: ${
+          err.userMessage ||
+          err.message ||
+          "Lỗi không xác định"
+        }`
+      );
     } finally {
       setDeleting(false);
     }
@@ -83,7 +93,9 @@ export default function DeletePostCard() {
       <Card.Body>
         {loading && <LoadingSpinner />}
 
-        {!loading && error && <ErrorAlert message={error} />}
+        {!loading && error && (
+          <ErrorAlert message={error} />
+        )}
 
         {!loading && !error && posts.length === 0 && (
           <EmptyState text="Đã xóa hết bài viết đang hiển thị." />
@@ -104,6 +116,7 @@ export default function DeletePostCard() {
                   size="sm"
                   variant="outline-danger"
                   onClick={() => setToDelete(post)}
+                  disabled={deleting}
                 >
                   Xóa
                 </Button>
@@ -116,31 +129,16 @@ export default function DeletePostCard() {
       <ConfirmModal
         show={!!toDelete}
         title="Xóa bài viết"
-        message={`Xóa bài viết #${toDelete?.id}?`}
+        message={`Bạn có chắc chắn muốn xóa bài viết #${toDelete?.id}?`}
         confirmText="Xóa"
         loading={deleting}
         onConfirm={handleDelete}
         onCancel={() => {
-          if (!deleting) setToDelete(null);
+          if (!deleting) {
+            setToDelete(null);
+          }
         }}
       />
-
-      <ToastContainer
-        position="bottom-end"
-        className="p-3 position-fixed"
-      >
-        <Toast
-          show={!!toast}
-          bg={toast?.bg}
-          onClose={() => setToast(null)}
-          delay={3500}
-          autohide
-        >
-          <Toast.Body className="text-white">
-            {toast?.message}
-          </Toast.Body>
-        </Toast>
-      </ToastContainer>
     </Card>
   );
 }

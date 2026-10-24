@@ -1,48 +1,53 @@
 
-import { Container, Row, Col } from "react-bootstrap";
+import { Routes, Route } from "react-router-dom";
 
-import AxiosDemo from "./components/AxiosDemo";
-import PostListCard from "./components/http/PostListCard";
-import CreatePostCard from "./components/http/CreatePostCard";
-import UpdatePostCard from "./components/http/UpdatePostCard";
-import PatchPostCard from "./components/http/PatchPostCard";
-import DeletePostCard from "./components/http/DeletePostCard";
-import RequestConfigCard from "./components/http/RequestConfigCard";
+import Layout from "./components/Layout";
+import AxiosDemoPage from "./pages/AxiosDemoPage";
+import HttpRequestsPage from "./pages/HttpRequestsPage";
+import PostListPage from "./pages/PostListPage";
+import PostDetailPage from "./pages/PostDetailPage";
+import PostCreatePage from "./pages/PostCreatePage";
+import PostEditPage from "./pages/PostEditPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 export default function App() {
   return (
-    <Container className="py-4">
-      <AxiosDemo />
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<AxiosDemoPage />} />
 
-      <h2 className="mt-5 mb-3">
-        HTTP Requests với Axios
-      </h2>
+        <Route
+          path="http"
+          element={<HttpRequestsPage />}
+        />
 
-      <Row xs={1} lg={2} className="g-4">
-        <Col>
-          <PostListCard />
-        </Col>
+        <Route path="posts">
+          <Route
+            index
+            element={<PostListPage />}
+          />
 
-        <Col>
-          <CreatePostCard />
-        </Col>
+          <Route
+            path="new"
+            element={<PostCreatePage />}
+          />
 
-        <Col>
-          <UpdatePostCard />
-        </Col>
+          <Route
+            path=":id"
+            element={<PostDetailPage />}
+          />
 
-        <Col>
-          <PatchPostCard />
-        </Col>
+          <Route
+            path=":id/edit"
+            element={<PostEditPage />}
+          />
+        </Route>
 
-        <Col>
-          <DeletePostCard />
-        </Col>
-
-        <Col>
-          <RequestConfigCard />
-        </Col>
-      </Row>
-    </Container>
+        <Route
+          path="*"
+          element={<NotFoundPage />}
+        />
+      </Route>
+    </Routes>
   );
 }

@@ -1,44 +1,62 @@
 
 import axiosClient from "./axiosClient";
 
-// NC2 - Tang service cho bai viet
 const postApi = {
-  // GET - danh sach bai viet
-  getAll: (params = {}, signal) =>
-    axiosClient.get("/posts", { params, signal }),
+  // GET danh sách, hỗ trợ phân trang và lọc tác giả.
+  getAll(params = {}, signal) {
+    return axiosClient.get("/posts", {
+      params,
+      signal,
+    });
+  },
 
-  // GET - chi tiet bai viet
-  getById: (id, signal) =>
-    axiosClient.get(`/posts/${id}`, { signal }),
+  // GET một bài viết.
+  getById(id, signal) {
+    return axiosClient.get(`/posts/${id}`, {
+      signal,
+    });
+  },
 
-  // GET - binh luan cua bai viet
-  getComments: (id, signal) =>
-    axiosClient.get(`/posts/${id}/comments`, { signal }),
+  // GET bình luận của bài viết.
+  getComments(id, signal) {
+    return axiosClient.get(`/posts/${id}/comments`, {
+      signal,
+    });
+  },
 
-  // POST - tao bai viet
-  create: (data, signal) =>
-    axiosClient.post("/posts", data, { signal }),
+  // POST tạo bài viết.
+  create(data) {
+    return axiosClient.post("/posts", data);
+  },
 
-  // PUT - cap nhat toan bo bai viet
-  update: (id, data, signal) =>
-    axiosClient.put(`/posts/${id}`, data, { signal }),
+  // PUT cập nhật toàn bộ bài viết.
+  update(id, data) {
+    return axiosClient.put(`/posts/${id}`, data);
+  },
 
-  // PATCH - cap nhat mot phan bai viet
-  patch: (id, partial, signal) =>
-    axiosClient.patch(`/posts/${id}`, partial, { signal }),
+  // PATCH cập nhật một phần bài viết.
+  patch(id, data) {
+    return axiosClient.patch(`/posts/${id}`, data);
+  },
 
-  // DELETE - xoa bai viet
-  remove: (id, signal) =>
-    axiosClient.delete(`/posts/${id}`, { signal }),
+  // DELETE bài viết.
+  remove(id) {
+    return axiosClient.delete(`/posts/${id}`);
+  },
 };
 
-// Service cho user, dung duoc o cac bai tiep theo
 export const userApi = {
-  getAll: (signal) =>
-    axiosClient.get("/users", { signal }),
+  getAll(signal) {
+    return axiosClient.get("/users", {
+      signal,
+    });
+  },
 
-  getById: (id, signal) =>
-    axiosClient.get(`/users/${id}`, { signal }),
+  getById(id, signal) {
+    return axiosClient.get(`/users/${id}`, {
+      signal,
+    });
+  },
 };
 
 export default postApi;
