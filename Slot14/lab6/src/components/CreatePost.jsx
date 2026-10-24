@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import axios from "axios";
+import postApi from "../api/postApi";
 import { Alert, Button, Card, Container, Form } from "react-bootstrap";
 
 function CreatePost() {
@@ -17,14 +18,11 @@ function CreatePost() {
     setResult(null);
 
     try {
-      const response = await axios.post(
-        "https://jsonplaceholder.typicode.com/posts",
-        {
-          title,
-          body,
-          userId: 1,
-        }
-      );
+      const response = await postApi.create({
+        title,
+        body,
+        userId: 1,
+      });
 
       setResult({
         status: response.status,
@@ -34,7 +32,7 @@ function CreatePost() {
       setTitle("");
       setBody("");
     } catch (err) {
-      setError(err.message);
+      setError(err.userMessage || "Không thể tạo bài viết");
     } finally {
       setSubmitting(false);
     }

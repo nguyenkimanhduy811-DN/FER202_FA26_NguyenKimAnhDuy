@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axiosClient from "../api/axiosClient";
 import {
   Alert,
   Card,
@@ -16,37 +17,29 @@ function RequestConfig() {
   useEffect(() => {
     const fetchWithConfig = async () => {
       try {
-        const response = await axios({
+        const response = await axiosClient({
           method: "get",
-          url: "https://jsonplaceholder.typicode.com/posts",
+          url: "/posts",
           params: {
             _page: 1,
             _limit: 3,
           },
           headers: {
             Accept: "application/json",
-            Authorization: "Bearer demo-token-123",
+            "X-Client": "FER202",
           },
           timeout: 5000,
         });
 
         setInfo({
           status: response.status,
+          duration: response.duration,
           contentType: response.headers["content-type"],
           total: response.headers["x-total-count"],
           data: response.data,
         });
       } catch (err) {
-        if (
-          err.code === "ECONNABORTED" ||
-          err.code === "ETIMEDOUT"
-        ) {
-          setError("Request quá thời gian (timeout).");
-        } else if (err.response) {
-          setError(`Server trả lỗi ${err.response.status}.`);
-        } else {
-          setError(err.message);
-        }
+        setError(err.userMessage || "Không thể gửi request");
       } finally {
         setLoading(false);
       }
@@ -78,13 +71,22 @@ function RequestConfig() {
       <Card>
         <Card.Body>
           <p>Status: {info.status}</p>
-          <p>Content-Type: {info.contentType}</p>
+
+          <p>
+            Thời gian xử lý: {info.duration ?? "N/A"} ms
+          </p>
+
+          <p>
+            Content-Type: {info.contentType || "Không có"}
+          </p>
+
           <p>
             Tổng số bài viết (x-total-count):{" "}
             {info.total ?? "Server không cung cấp header này"}
           </p>
 
           <h5>Danh sách bài viết</h5>
+
           <ListGroup>
             {info.data.map((post) => (
               <ListGroup.Item key={post.id}>

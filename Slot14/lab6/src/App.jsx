@@ -1,3 +1,6 @@
+
+import { Container } from "react-bootstrap";
+
 import AxiosDemo from "./components/AxiosDemo";
 import PostList from "./components/PostList";
 import CreatePost from "./components/CreatePost";
@@ -6,41 +9,39 @@ import PatchPost from "./components/PatchPost";
 import DeletePost from "./components/DeletePost";
 import RequestConfig from "./components/RequestConfig";
 
-import "./App.css";
-
 function App() {
   return (
-    <div className="axios-app">
-      <header className="text-center py-4 bg-primary text-white">
-        <h1 className="fw-bold">Exercise 27 - DemoAxios</h1>
-        <p className="mb-0">
-          TODO 1 – Async/Await
-        </p>
+    <div>
+      <header className="bg-dark text-white py-4">
+        <Container>
+          <h1>Axios Demo - TODO 2</h1>
+          <p className="mb-0">
+            Axios Instance, Interceptors và tầng Service
+          </p>
+        </Container>
       </header>
 
-      <AxiosDemo />
-      <hr className="section-divider" />
+      <main>
+        <AxiosDemo />
+        <hr />
 
-      <PostList />
-      <hr className="section-divider" />
+        <PostList />
+        <hr />
 
-      <CreatePost />
-      <hr className="section-divider" />
+        <CreatePost />
+        <hr />
 
-      <UpdatePost />
-      <hr className="section-divider" />
+        <UpdatePost />
+        <hr />
 
-      <PatchPost />
-      <hr className="section-divider" />
+        <PatchPost />
+        <hr />
 
-      <DeletePost />
-      <hr className="section-divider" />
+        <DeletePost />
+        <hr />
 
-      <RequestConfig />
-
-      <footer className="text-center py-4 text-muted">
-        Exercise 27 — TODO 1
-      </footer>
+        <RequestConfig />
+      </main>
     </div>
   );
 }

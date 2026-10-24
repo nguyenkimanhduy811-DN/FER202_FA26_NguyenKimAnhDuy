@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from "react";
-import axios from "axios";
+import postApi from "../api/postApi";
 import {
   Alert,
   Button,
@@ -8,8 +9,6 @@ import {
   Form,
   Spinner,
 } from "react-bootstrap";
-
-const URL = "https://jsonplaceholder.typicode.com/posts/1";
 
 function UpdatePost() {
   const [post, setPost] = useState(null);
@@ -21,10 +20,10 @@ function UpdatePost() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(URL);
+        const response = await postApi.getById(1);
         setPost(response.data);
       } catch (err) {
-        setError(err.message);
+        setError(err.userMessage || "Không thể tải bài viết");
       } finally {
         setLoading(false);
       }
@@ -41,7 +40,7 @@ function UpdatePost() {
     setResult(null);
 
     try {
-      const response = await axios.put(URL, {
+      const response = await postApi.update(1, {
         id: post.id,
         userId: post.userId,
         title: post.title,
@@ -53,7 +52,7 @@ function UpdatePost() {
         data: response.data,
       });
     } catch (err) {
-      setError(err.message);
+      setError(err.userMessage || "Không thể cập nhật bài viết");
     } finally {
       setSaving(false);
     }

@@ -1,8 +1,7 @@
-import { useState } from "react";
-import axios from "axios";
-import { Alert, Button, Card, Container, Form } from "react-bootstrap";
 
-const URL = "https://jsonplaceholder.typicode.com/posts/1";
+import { useState } from "react";
+import postApi from "../api/postApi";
+import { Alert, Button, Card, Container, Form } from "react-bootstrap";
 
 function PatchPost() {
   const [title, setTitle] = useState("");
@@ -19,7 +18,7 @@ function PatchPost() {
     setResult(null);
 
     try {
-      const response = await axios.patch(URL, {
+      const response = await postApi.patch(1, {
         title: newTitle,
       });
 
@@ -28,7 +27,7 @@ function PatchPost() {
         data: response.data,
       });
     } catch (err) {
-      setError(err.message);
+      setError(err.userMessage || "Không thể cập nhật tiêu đề");
     } finally {
       setSaving(false);
     }

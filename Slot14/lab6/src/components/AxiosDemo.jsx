@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from "react";
-import axios from "axios";
+import postApi from "../api/postApi";
 import { Alert, Card, Container, Spinner } from "react-bootstrap";
 
 function AxiosDemo() {
@@ -10,13 +11,13 @@ function AxiosDemo() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts/1"
-        );
+        // Goi API thong qua service, khong viet URL day du
+        const response = await postApi.getById(1);
 
         setData(response.data);
       } catch (err) {
-        setError(err.message);
+        // Loi tieng Viet da duoc gan boi response interceptor
+        setError(err.userMessage || "Không thể tải bài viết");
       } finally {
         setLoading(false);
       }

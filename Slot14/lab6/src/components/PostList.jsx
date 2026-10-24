@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from "react";
-import axios from "axios";
+import postApi from "../api/postApi";
 import {
   Alert,
   Container,
@@ -15,19 +16,14 @@ function PostList() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts",
-          {
-            params: {
-              userId: 1,
-              _limit: 5,
-            },
-          }
-        );
+        const response = await postApi.getAll({
+          userId: 1,
+          _limit: 5,
+        });
 
         setPosts(response.data);
       } catch (err) {
-        setError(err.message);
+        setError(err.userMessage || "Không thể tải danh sách bài viết");
       } finally {
         setLoading(false);
       }
@@ -56,13 +52,17 @@ function PostList() {
     <Container className="py-4">
       <h2>GET – Danh sách bài viết của user 1</h2>
 
-      <ListGroup>
-        {posts.map((post) => (
-          <ListGroup.Item key={post.id}>
-            #{post.id} – {post.title}
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
+      {posts.length === 0 ? (
+        <Alert variant="info">Không có bài viết nào.</Alert>
+      ) : (
+        <ListGroup>
+          {posts.map((post) => (
+            <ListGroup.Item key={post.id}>
+              #{post.id} – {post.title}
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      )}
     </Container>
   );
 }
