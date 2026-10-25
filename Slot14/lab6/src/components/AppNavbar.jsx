@@ -3,6 +3,9 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 import { NavLink, Link } from "react-router-dom";
 
 export default function AppNavbar() {
+  const apiUrl =
+    import.meta.env.VITE_API_URL || "http://localhost:3001";
+
   return (
     <Navbar bg="dark" variant="dark" expand="md">
       <Container>
@@ -30,6 +33,10 @@ export default function AppNavbar() {
               + Tạo bài viết
             </Nav.Link>
           </Nav>
+
+          <Navbar.Text className="small">
+            API: {apiUrl}
+          </Navbar.Text>
         </Navbar.Collapse>
       </Container>
     </Navbar>

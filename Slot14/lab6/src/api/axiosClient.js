@@ -3,7 +3,7 @@ import axios from "axios";
 
 // NC2 - Axios instance dung chung
 const axiosClient = axios.create({
-  baseURL: "https://jsonplaceholder.typicode.com",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3001",
   timeout: 8000,
   headers: {
     "Content-Type": "application/json; charset=UTF-8",
