@@ -1,10 +1,12 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import {
   Link,
   useSearchParams,
   useOutletContext,
 } from "react-router-dom";
+
 import {
   Table,
   Form,
@@ -14,10 +16,12 @@ import {
   Row,
   Col,
   Badge,
+  InputGroup,
 } from "react-bootstrap";
 
 import useFlash from "../hooks/useFlash";
 import useAxios from "../hooks/useAxios";
+import useDebounce from "../hooks/useDebounce";
 import postApi, { userApi } from "../api/postApi";
 import ConfirmModal from "../components/ConfirmModal";
 import ErrorAlert from "../components/common/ErrorAlert";
@@ -29,7 +33,7 @@ export default function PostListPage() {
 
   const { notify } = useOutletContext();
 
-  // Đọc trạng thái phân trang và lọc từ URL.
+  // Đọc phân trang, tác giả và từ khóa từ URL.
   const [searchParams, setSearchParams] = useSearchParams();
 
   const pageValue = Number(searchParams.get("page") ?? 1);
@@ -39,11 +43,18 @@ export default function PostListPage() {
       : 1;
 
   const userId = searchParams.get("userId") ?? "";
+  const q = searchParams.get("q") ?? "";
 
+  // NC9: State ô tìm kiếm và debounce 500ms.
+  const [keyword, setKeyword] = useState(q);
+  const debounced = useDebounce(keyword.trim(), 500);
+
+  // Cập nhật URL và giữ các bộ lọc hiện tại.
   const changeQuery = (next) => {
     const merged = {
       page: String(page),
       userId,
+      q,
       ...next,
     };
 
@@ -55,6 +66,24 @@ export default function PostListPage() {
 
     setSearchParams(merged);
   };
+
+  // Chỉ cập nhật từ khóa trên URL sau 500ms ngừng gõ.
+  // Mỗi lần cập nhật từ khóa mới, quay về trang 1.
+  useEffect(() => {
+    if (debounced !== q) {
+      changeQuery({
+        q: debounced,
+        page: "1",
+      });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debounced]);
+
+  // Đồng bộ ô tìm kiếm khi q thay đổi qua URL.
+  useEffect(() => {
+    setKeyword(q);
+  }, [q]);
 
   // NC8: GET danh sách tác giả.
   const {
@@ -68,7 +97,7 @@ export default function PostListPage() {
     { initialData: [] }
   );
 
-  // Chuẩn bị tham số cho GET bài viết.
+  // Chuẩn bị tham số GET bài viết.
   const params = {
     _page: page,
     _limit: LIMIT,
@@ -78,7 +107,12 @@ export default function PostListPage() {
     params.userId = userId;
   }
 
-  // NC8: GET bài viết, tự hủy request khi page/userId đổi.
+  // NC9: Tìm kiếm theo từ khóa q bằng json-server.
+  if (q) {
+    params.q = q;
+  }
+
+  // NC8 + NC9: Hủy request cũ khi page, userId hoặc q đổi.
   const {
     data: posts,
     setData: setPosts,
@@ -88,11 +122,11 @@ export default function PostListPage() {
     refetch,
   } = useAxios(
     (signal) => postApi.getAll(params, signal),
-    [page, userId],
+    [page, userId, q],
     { initialData: [] }
   );
 
-  // Số trang lấy từ header của API.
+  // Số lượng bài viết lấy từ header API.
   const total = Number(
     headers["x-total-count"] ?? posts.length
   );
@@ -103,8 +137,9 @@ export default function PostListPage() {
   );
 
   const authorName = (id) =>
-    users.find((user) => String(user.id) === String(id))?.name ??
-    `User ${id}`;
+    users.find(
+      (user) => String(user.id) === String(id)
+    )?.name ?? `User ${id}`;
 
   // DELETE một bài viết.
   const [toDelete, setToDelete] = useState(null);
@@ -130,7 +165,7 @@ export default function PostListPage() {
 
       setToDelete(null);
 
-      // Tải lại để cập nhật số lượng và dữ liệu phân trang.
+      // Tải lại để cập nhật dữ liệu và số lượng.
       refetch();
     } catch (err) {
       notify(
@@ -155,6 +190,31 @@ export default function PostListPage() {
       </div>
 
       <Row className="mb-3 g-2">
+        {/* NC9: Ô tìm kiếm có debounce 500ms. */}
+        <Col md={6}>
+          <InputGroup>
+            <InputGroup.Text>🔍</InputGroup.Text>
+
+            <Form.Control
+              placeholder="Tìm bài viết..."
+              aria-label="Tìm bài viết"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+            />
+
+            {keyword && (
+              <Button
+                variant="outline-secondary"
+                onClick={() => setKeyword("")}
+                aria-label="Xóa từ khóa tìm kiếm"
+              >
+                ✕
+              </Button>
+            )}
+          </InputGroup>
+        </Col>
+
+        {/* Bộ lọc tác giả hiện có. */}
         <Col md={4}>
           <Form.Select
             value={userId}
@@ -186,7 +246,10 @@ export default function PostListPage() {
           )}
         </Col>
 
-        <Col md={2} className="d-flex align-items-center">
+        <Col
+          md={2}
+          className="d-flex align-items-center"
+        >
           {loading && (
             <Spinner size="sm" animation="border" />
           )}
@@ -264,7 +327,10 @@ export default function PostListPage() {
 
           {!loading && !error && posts.length === 0 && (
             <tr>
-              <td colSpan={4} className="text-center text-muted">
+              <td
+                colSpan={4}
+                className="text-center text-muted"
+              >
                 Không có bài viết phù hợp.
               </td>
             </tr>
