@@ -19,12 +19,13 @@ import {
   Table,
 } from "react-bootstrap";
 
+import useAxios from "../hooks/useAxios";
 import useFlash from "../hooks/useFlash";
 import postApi, { userApi } from "../api/postApi";
 import ConfirmModal from "../components/ConfirmModal";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 
-// GET bài viết trước vì cần userId.
+// GET bài viết trước vì cần biết userId.
 // Sau đó tải tác giả và bình luận song song.
 const loadDetail = async (id, signal) => {
   const { data: post } = await postApi.getById(id, signal);
@@ -34,7 +35,6 @@ const loadDetail = async (id, signal) => {
     postApi.getComments(id, signal),
   ]);
 
-  // Promise.allSettled không tự ném lỗi khi request bị hủy.
   if (signal.aborted) {
     throw new axios.CanceledError("Request đã bị hủy");
   }
@@ -65,8 +65,7 @@ const loadDetail = async (id, signal) => {
   };
 };
 
-// So sánh 3 request tuần tự với 1 request bài viết
-// và 2 request thông tin phụ chạy song song.
+// So sánh thời gian tải tuần tự và song song.
 const measure = async (id) => {
   let start = performance.now();
 
@@ -97,10 +96,18 @@ export default function PostDetailPage() {
   const navigate = useNavigate();
   const { notify } = useOutletContext();
 
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [reloadKey, setReloadKey] = useState(0);
+  // NC8: useAxios quản lý GET, loading, error và AbortController.
+  // Khi id đổi, hook tự hủy request cũ và tải bài viết mới.
+  const {
+    data,
+    setData,
+    loading,
+    error,
+    refetch,
+  } = useAxios(
+    (signal) => loadDetail(id, signal),
+    [id]
+  );
 
   const [quickTitle, setQuickTitle] = useState("");
   const [patching, setPatching] = useState(false);
@@ -111,55 +118,14 @@ export default function PostDetailPage() {
   const [timing, setTiming] = useState(null);
   const [measuring, setMeasuring] = useState(false);
 
-  // Tải dữ liệu, hủy request khi id đổi hoặc component bị tháo.
-  useEffect(() => {
-    const controller = new AbortController();
-
-    const load = async () => {
-      setLoading(true);
-      setError(null);
-      setData(null);
-
-      try {
-        const result = await loadDetail(id, controller.signal);
-        setData(result.data);
-      } catch (err) {
-        if (
-          axios.isCancel(err) ||
-          controller.signal.aborted
-        ) {
-          return;
-        }
-
-        setError(
-          err.userMessage ??
-          err.message ??
-          "Không thể tải bài viết."
-        );
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    load();
-
-    return () => controller.abort();
-  }, [id, reloadKey]);
-
-  // Cập nhật ô tiêu đề nhanh khi bài viết được tải lại.
+  // Đồng bộ ô tiêu đề khi dữ liệu bài viết thay đổi.
   useEffect(() => {
     if (data?.post) {
       setQuickTitle(data.post.title);
     }
   }, [data]);
 
-  const refetch = () => {
-    setReloadKey((key) => key + 1);
-  };
-
-  // PATCH chỉ gửi title, không gửi lại body hoặc userId.
+  // PATCH chỉ gửi trường title.
   const handlePatch = async (e) => {
     e.preventDefault();
 
@@ -170,9 +136,7 @@ export default function PostDetailPage() {
       return;
     }
 
-    if (title === data.post.title) {
-      return;
-    }
+    if (title === data.post.title) return;
 
     setPatching(true);
 
@@ -191,16 +155,14 @@ export default function PostDetailPage() {
     } catch (err) {
       notify(
         "danger",
-        `Cập nhật thất bại: ${
-          err.userMessage || err.message
-        }`
+        `Cập nhật thất bại: ${err.userMessage || err.message}`
       );
     } finally {
       setPatching(false);
     }
   };
 
-  // DELETE và chuyển về trang danh sách kèm thông báo.
+  // DELETE xong trở về danh sách và gửi thông báo qua navigation state.
   const handleDelete = async () => {
     if (deleting) return;
 
@@ -220,17 +182,15 @@ export default function PostDetailPage() {
     } catch (err) {
       notify(
         "danger",
-        `Xóa thất bại: ${
-          err.userMessage || err.message
-        }`
+        `Xóa thất bại: ${err.userMessage || err.message}`
       );
-
-      setDeleting(false);
       setShowDelete(false);
+    } finally {
+      setDeleting(false);
     }
   };
 
-  // Đo thời gian tải tuần tự và song song.
+  // Đo thời gian cho yêu cầu NC3.
   const handleMeasure = async () => {
     setMeasuring(true);
     setTiming(null);
@@ -255,20 +215,22 @@ export default function PostDetailPage() {
   if (error) {
     return (
       <Alert variant="warning">
-        {error} – bài viết #{id}.{" "}
+        <div>{error} – bài viết #{id}.</div>
 
-        <Alert.Link as={Link} to="/posts">
-          Quay lại danh sách
-        </Alert.Link>
+        <div className="mt-2">
+          <Alert.Link as={Link} to="/posts">
+            Quay lại danh sách
+          </Alert.Link>
 
-        <Button
-          size="sm"
-          variant="outline-secondary"
-          className="ms-2"
-          onClick={refetch}
-        >
-          Thử lại
-        </Button>
+          <Button
+            size="sm"
+            variant="outline-secondary"
+            className="ms-3"
+            onClick={refetch}
+          >
+            Thử lại
+          </Button>
+        </div>
       </Alert>
     );
   }
@@ -279,6 +241,10 @@ export default function PostDetailPage() {
         Không tìm thấy dữ liệu bài viết.
         {" "}
         <Link to="/posts">Quay lại danh sách</Link>
+        {" "}
+        <Button size="sm" variant="outline-secondary" onClick={refetch}>
+          Thử lại
+        </Button>
       </Alert>
     );
   }
@@ -295,21 +261,13 @@ export default function PostDetailPage() {
         ← Quay lại
       </Button>
 
-      {warning && (
-        <Alert variant="warning">
-          {warning}
-        </Alert>
-      )}
+      {warning && <Alert variant="warning">{warning}</Alert>}
 
-      {/* Thông tin bài viết */}
       <Card className="mb-4 shadow-sm">
         <Card.Header className="d-flex justify-content-between align-items-center flex-wrap gap-2">
           <span>
             Post #{post.id} ·{" "}
-            <strong>
-              {author?.name ?? `User ${post.userId}`}
-            </strong>
-
+            <strong>{author?.name ?? `User ${post.userId}`}</strong>
             {author?.email && ` (${author.email})`}
           </span>
 
@@ -343,7 +301,6 @@ export default function PostDetailPage() {
             {post.body}
           </Card.Text>
 
-          {/* Sửa nhanh tiêu đề bằng PATCH */}
           <Form onSubmit={handlePatch} className="mt-4">
             <Form.Label className="small text-muted">
               Sửa nhanh tiêu đề (PATCH)
@@ -378,27 +335,19 @@ export default function PostDetailPage() {
                   "PATCH"
                 )}
               </Button>
-
-              <Form.Control.Feedback type="invalid">
-                Tiêu đề tối thiểu 5 ký tự.
-              </Form.Control.Feedback>
             </InputGroup>
+
+            <Form.Control.Feedback type="invalid">
+              Tiêu đề phải có ít nhất 5 ký tự.
+            </Form.Control.Feedback>
           </Form>
         </Card.Body>
       </Card>
 
-      {/* So sánh thời gian */}
       <Card className="mb-4">
-        <Card.Header>
-          NC3 · So sánh tuần tự và song song
-        </Card.Header>
+        <Card.Header>NC3 · So sánh tuần tự và song song</Card.Header>
 
         <Card.Body>
-          <p className="text-muted small">
-            Đo thời gian tải bài viết, tác giả và bình luận
-            theo hai cách.
-          </p>
-
           <Button
             size="sm"
             onClick={handleMeasure}
@@ -437,10 +386,8 @@ export default function PostDetailPage() {
         </Card.Body>
       </Card>
 
-      {/* Bình luận */}
       <h4 className="mb-3">
-        Bình luận{" "}
-        <Badge bg="secondary">{comments.length}</Badge>
+        Bình luận <Badge bg="secondary">{comments.length}</Badge>
       </h4>
 
       <ListGroup className="mb-4">
@@ -448,9 +395,7 @@ export default function PostDetailPage() {
           <ListGroup.Item key={comment.id}>
             <div className="fw-semibold">{comment.name}</div>
 
-            <small className="text-muted">
-              {comment.email}
-            </small>
+            <small className="text-muted">{comment.email}</small>
 
             <div className="mt-1">{comment.body}</div>
           </ListGroup.Item>
@@ -463,7 +408,6 @@ export default function PostDetailPage() {
         )}
       </ListGroup>
 
-      {/* Modal xác nhận xóa */}
       <ConfirmModal
         show={showDelete}
         title="Xóa bài viết"

@@ -1,56 +1,31 @@
 
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import {
-  Card,
-  ListGroup,
-  Button,
-} from "react-bootstrap";
+import { Card, ListGroup, Button } from "react-bootstrap";
 
-import postApi from "../../api/postApi";
+import useAxios from "../../hooks/useAxios";
+import AsyncContent from "../common/AsyncContent";
 import ConfirmModal from "../ConfirmModal";
-import LoadingSpinner from "../common/LoadingSpinner";
-import ErrorAlert from "../common/ErrorAlert";
-import EmptyState from "../common/EmptyState";
+import postApi from "../../api/postApi";
 
 export default function DeletePostCard() {
   const { notify } = useOutletContext();
 
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // GET danh sách bằng custom hook.
+  const {
+    data: posts,
+    setData: setPosts,
+    loading,
+    error,
+    refetch,
+  } = useAxios(
+    (signal) => postApi.getAll({ _limit: 5 }, signal),
+    [],
+    { initialData: [] }
+  );
+
   const [toDelete, setToDelete] = useState(null);
   const [deleting, setDeleting] = useState(false);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    const load = async () => {
-      try {
-        const res = await postApi.getAll(
-          { _limit: 5 },
-          controller.signal
-        );
-
-        setPosts(res.data);
-      } catch (err) {
-        if (axios.isCancel(err)) return;
-
-        setError(
-          err.userMessage || "Không thể tải bài viết"
-        );
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    load();
-
-    return () => controller.abort();
-  }, []);
 
   const handleDelete = async () => {
     if (!toDelete || deleting) return;
@@ -60,6 +35,7 @@ export default function DeletePostCard() {
     try {
       const res = await postApi.remove(toDelete.id);
 
+      // Cập nhật danh sách cục bộ, không cần GET lại.
       setPosts((prev) =>
         prev.filter((post) => post.id !== toDelete.id)
       );
@@ -74,9 +50,7 @@ export default function DeletePostCard() {
       notify(
         "danger",
         `Xóa thất bại: ${
-          err.userMessage ||
-          err.message ||
-          "Lỗi không xác định"
+          err.userMessage || err.message
         }`
       );
     } finally {
@@ -91,39 +65,37 @@ export default function DeletePostCard() {
       </Card.Header>
 
       <Card.Body>
-        {loading && <LoadingSpinner />}
-
-        {!loading && error && (
-          <ErrorAlert message={error} />
-        )}
-
-        {!loading && !error && posts.length === 0 && (
-          <EmptyState text="Đã xóa hết bài viết đang hiển thị." />
-        )}
-
-        {!loading && !error && posts.length > 0 && (
-          <ListGroup variant="flush">
-            {posts.map((post) => (
-              <ListGroup.Item
-                key={post.id}
-                className="d-flex justify-content-between align-items-center gap-2"
-              >
-                <span>
-                  #{post.id} – {post.title}
-                </span>
-
-                <Button
-                  size="sm"
-                  variant="outline-danger"
-                  onClick={() => setToDelete(post)}
-                  disabled={deleting}
+        <AsyncContent
+          loading={loading}
+          error={error}
+          data={posts}
+          onRetry={refetch}
+          emptyText="Đã xóa hết bài viết đang hiển thị."
+        >
+          {(items) => (
+            <ListGroup variant="flush">
+              {items.map((post) => (
+                <ListGroup.Item
+                  key={post.id}
+                  className="d-flex justify-content-between align-items-center gap-2"
                 >
-                  Xóa
-                </Button>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        )}
+                  <span>
+                    #{post.id} – {post.title}
+                  </span>
+
+                  <Button
+                    size="sm"
+                    variant="outline-danger"
+                    disabled={deleting}
+                    onClick={() => setToDelete(post)}
+                  >
+                    Xóa
+                  </Button>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          )}
+        </AsyncContent>
       </Card.Body>
 
       <ConfirmModal
@@ -134,9 +106,7 @@ export default function DeletePostCard() {
         loading={deleting}
         onConfirm={handleDelete}
         onCancel={() => {
-          if (!deleting) {
-            setToDelete(null);
-          }
+          if (!deleting) setToDelete(null);
         }}
       />
     </Card>

@@ -1,6 +1,5 @@
 
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
 import {
   Link,
   useSearchParams,
@@ -18,6 +17,7 @@ import {
 } from "react-bootstrap";
 
 import useFlash from "../hooks/useFlash";
+import useAxios from "../hooks/useAxios";
 import postApi, { userApi } from "../api/postApi";
 import ConfirmModal from "../components/ConfirmModal";
 import ErrorAlert from "../components/common/ErrorAlert";
@@ -33,13 +33,13 @@ export default function PostListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const pageValue = Number(searchParams.get("page") ?? 1);
-  const page = Number.isInteger(pageValue) && pageValue > 0
-    ? pageValue
-    : 1;
+  const page =
+    Number.isInteger(pageValue) && pageValue > 0
+      ? pageValue
+      : 1;
 
   const userId = searchParams.get("userId") ?? "";
 
-  // Cập nhật query string nhưng giữ lại các điều kiện khác.
   const changeQuery = (next) => {
     const merged = {
       page: String(page),
@@ -56,105 +56,72 @@ export default function PostListPage() {
     setSearchParams(merged);
   };
 
-  // Lấy danh sách tác giả.
-  const [users, setUsers] = useState([]);
+  // NC8: GET danh sách tác giả.
+  const {
+    data: users,
+    loading: loadingUsers,
+    error: usersError,
+    refetch: retryUsers,
+  } = useAxios(
+    (signal) => userApi.getAll(signal),
+    [],
+    { initialData: [] }
+  );
 
-  useEffect(() => {
-    const controller = new AbortController();
+  // Chuẩn bị tham số cho GET bài viết.
+  const params = {
+    _page: page,
+    _limit: LIMIT,
+  };
 
-    const loadUsers = async () => {
-      try {
-        const res = await userApi.getAll(controller.signal);
-        setUsers(res.data);
-      } catch (err) {
-        if (!axios.isCancel(err)) {
-          console.error(
-            err.userMessage || "Không thể tải danh sách tác giả"
-          );
-        }
-      }
-    };
+  if (userId) {
+    params.userId = userId;
+  }
 
-    loadUsers();
+  // NC8: GET bài viết, tự hủy request khi page/userId đổi.
+  const {
+    data: posts,
+    setData: setPosts,
+    headers,
+    loading,
+    error,
+    refetch,
+  } = useAxios(
+    (signal) => postApi.getAll(params, signal),
+    [page, userId],
+    { initialData: [] }
+  );
 
-    return () => controller.abort();
-  }, []);
+  // Số trang lấy từ header của API.
+  const total = Number(
+    headers["x-total-count"] ?? posts.length
+  );
 
-  // Lấy bài viết theo page và userId.
-  const [posts, setPosts] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [reloadKey, setReloadKey] = useState(0);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    const loadPosts = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const params = {
-          _page: page,
-          _limit: LIMIT,
-        };
-
-        if (userId) {
-          params.userId = userId;
-        }
-
-        const res = await postApi.getAll(
-          params,
-          controller.signal
-        );
-
-        setPosts(res.data);
-
-        // HTTP header được Axios chuyển thành chữ thường.
-        setTotal(
-          Number(res.headers["x-total-count"] ?? res.data.length)
-        );
-      } catch (err) {
-        if (axios.isCancel(err)) return;
-
-        setError(
-          err.userMessage || "Không thể tải danh sách bài viết"
-        );
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    loadPosts();
-
-    return () => controller.abort();
-  }, [page, userId, reloadKey]);
-
-  const totalPages = Math.max(1, Math.ceil(total / LIMIT));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(total / LIMIT)
+  );
 
   const authorName = (id) =>
-    users.find((user) => user.id === id)?.name ?? `User ${id}`;
+    users.find((user) => String(user.id) === String(id))?.name ??
+    `User ${id}`;
 
-  // Xóa bài viết bằng DELETE sau khi xác nhận.
+  // DELETE một bài viết.
   const [toDelete, setToDelete] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
   const handleDeleteOne = async () => {
-    if (!toDelete) return;
+    if (!toDelete || deleting) return;
 
     setDeleting(true);
 
     try {
       const res = await postApi.remove(toDelete.id);
 
+      // Cập nhật tức thời danh sách đang hiển thị.
       setPosts((prev) =>
         prev.filter((post) => post.id !== toDelete.id)
       );
-
-      setTotal((prev) => Math.max(0, prev - 1));
 
       notify(
         "success",
@@ -162,6 +129,9 @@ export default function PostListPage() {
       );
 
       setToDelete(null);
+
+      // Tải lại để cập nhật số lượng và dữ liệu phân trang.
+      refetch();
     } catch (err) {
       notify(
         "danger",
@@ -184,12 +154,12 @@ export default function PostListPage() {
         </Button>
       </div>
 
-      {/* Bộ lọc tác giả */}
-      <Row className="mb-3 g-2 align-items-center">
+      <Row className="mb-3 g-2">
         <Col md={4}>
           <Form.Select
-            aria-label="Lọc theo tác giả"
             value={userId}
+            aria-label="Lọc theo tác giả"
+            disabled={loadingUsers}
             onChange={(e) =>
               changeQuery({
                 userId: e.target.value,
@@ -205,14 +175,20 @@ export default function PostListPage() {
               </option>
             ))}
           </Form.Select>
+
+          {usersError && (
+            <div className="mt-2">
+              <ErrorAlert
+                message={usersError}
+                onRetry={retryUsers}
+              />
+            </div>
+          )}
         </Col>
 
-        <Col md={2}>
+        <Col md={2} className="d-flex align-items-center">
           {loading && (
-            <span className="text-muted">
-              <Spinner size="sm" className="me-2" />
-              Đang tải...
-            </span>
+            <Spinner size="sm" animation="border" />
           )}
         </Col>
       </Row>
@@ -220,11 +196,10 @@ export default function PostListPage() {
       {error && (
         <ErrorAlert
           message={error}
-          onRetry={() => setReloadKey((key) => key + 1)}
+          onRetry={refetch}
         />
       )}
 
-      {/* Bảng bài viết */}
       <Table
         striped
         bordered
@@ -278,6 +253,7 @@ export default function PostListPage() {
                 <Button
                   size="sm"
                   variant="outline-danger"
+                  disabled={deleting}
                   onClick={() => setToDelete(post)}
                 >
                   Xóa
@@ -296,7 +272,6 @@ export default function PostListPage() {
         </tbody>
       </Table>
 
-      {/* Phân trang */}
       <Pagination className="justify-content-center flex-wrap">
         <Pagination.Prev
           disabled={page <= 1 || loading}
@@ -312,6 +287,7 @@ export default function PostListPage() {
           <Pagination.Item
             key={number}
             active={number === page}
+            disabled={loading}
             onClick={() =>
               changeQuery({ page: String(number) })
             }
@@ -328,13 +304,12 @@ export default function PostListPage() {
         />
       </Pagination>
 
-      {/* Modal xác nhận xóa */}
       <ConfirmModal
         show={!!toDelete}
         title="Xóa bài viết"
         message={
           <>
-            Bạn có chắc chắn muốn xóa bài viết{" "}
+            Bạn có chắc chắn muốn xóa{" "}
             <strong>
               #{toDelete?.id} {toDelete?.title}
             </strong>
