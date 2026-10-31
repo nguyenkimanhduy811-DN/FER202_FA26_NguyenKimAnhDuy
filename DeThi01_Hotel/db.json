@@ -1,0 +1,184 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "admin123",
+      "role": "Admin",
+      "fullName": "Hotel Manager",
+      "email": "admin@hotel.com"
+    },
+    {
+      "id": "2",
+      "username": "user1",
+      "password": "user123",
+      "role": "User",
+      "fullName": "Nguyen Van A",
+      "email": "user1@hotel.com"
+    },
+    {
+      "id": "3",
+      "username": "receptionist",
+      "password": "recep123",
+      "role": "User",
+      "fullName": "Tran Thi B",
+      "email": "receptionist@hotel.com"
+    }
+  ],
+  "roomTypes": [
+    {
+      "id": "1",
+      "name": "Standard"
+    },
+    {
+      "id": "2",
+      "name": "Deluxe"
+    },
+    {
+      "id": "3",
+      "name": "Suite"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "2",
+      "name": "Room 102",
+      "roomTypeId": 1,
+      "floor": "1",
+      "view": "Garden View",
+      "priceWeekday": 800000,
+      "priceWeekend": 1200000,
+      "lastRenovated": "15/03/2022"
+    },
+    {
+      "id": "3",
+      "name": "Room 103",
+      "roomTypeId": 1,
+      "floor": "1",
+      "view": "Pool View",
+      "priceWeekday": 850000,
+      "priceWeekend": 1250000,
+      "lastRenovated": "20/06/2023"
+    },
+    {
+      "id": "4",
+      "name": "Room 201",
+      "roomTypeId": 1,
+      "floor": "2",
+      "view": "City View",
+      "priceWeekday": 850000,
+      "priceWeekend": 1250000,
+      "lastRenovated": "20/06/2023"
+    },
+    {
+      "id": "5",
+      "name": "Room 202",
+      "roomTypeId": 1,
+      "floor": "2",
+      "view": "Garden View",
+      "priceWeekday": 800000,
+      "priceWeekend": 1200000,
+      "lastRenovated": "15/03/2022"
+    },
+    {
+      "id": "6",
+      "name": "Deluxe 301",
+      "roomTypeId": 2,
+      "floor": "3",
+      "view": "Sea View",
+      "priceWeekday": 1500000,
+      "priceWeekend": 2000000,
+      "lastRenovated": "10/01/2024"
+    },
+    {
+      "id": "7",
+      "name": "Deluxe 302",
+      "roomTypeId": 2,
+      "floor": "3",
+      "view": "City View",
+      "priceWeekday": 1400000,
+      "priceWeekend": 1900000,
+      "lastRenovated": "10/01/2024"
+    },
+    {
+      "id": "8",
+      "name": "Deluxe 401",
+      "roomTypeId": 2,
+      "floor": "4",
+      "view": "Sea View",
+      "priceWeekday": 1600000,
+      "priceWeekend": 2100000,
+      "lastRenovated": "05/08/2023"
+    },
+    {
+      "id": "9",
+      "name": "Deluxe 402",
+      "roomTypeId": 2,
+      "floor": "4",
+      "view": "Pool View",
+      "priceWeekday": 1550000,
+      "priceWeekend": 2050000,
+      "lastRenovated": "05/08/2023"
+    },
+    {
+      "id": "10",
+      "name": "Deluxe 403",
+      "roomTypeId": 2,
+      "floor": "4",
+      "view": "Garden View",
+      "priceWeekday": 1450000,
+      "priceWeekend": 1950000,
+      "lastRenovated": "12/12/2023"
+    },
+    {
+      "id": "11",
+      "name": "Suite 501",
+      "roomTypeId": 3,
+      "floor": "5",
+      "view": "Sea View",
+      "priceWeekday": 3000000,
+      "priceWeekend": 4500000,
+      "lastRenovated": "01/03/2024"
+    },
+    {
+      "id": "12",
+      "name": "Suite 502",
+      "roomTypeId": 3,
+      "floor": "5",
+      "view": "Sea View",
+      "priceWeekday": 3200000,
+      "priceWeekend": 4700000,
+      "lastRenovated": "01/03/2024"
+    },
+    {
+      "id": "13",
+      "name": "Suite 601",
+      "roomTypeId": 3,
+      "floor": "6",
+      "view": "Panoramic",
+      "priceWeekday": 3500000,
+      "priceWeekend": 5000000,
+      "lastRenovated": "15/05/2024"
+    },
+    {
+      "id": "14",
+      "name": "Suite 602",
+      "roomTypeId": 3,
+      "floor": "6",
+      "view": "Sea View",
+      "priceWeekday": 3300000,
+      "priceWeekend": 4800000,
+      "lastRenovated": "15/05/2024"
+    },
+    {
+      "id": "15",
+      "name": "Suite 701",
+      "roomTypeId": 3,
+      "floor": "7",
+      "view": "Panoramic",
+      "priceWeekday": 4000000,
+      "priceWeekend": 5500000,
+      "lastRenovated": "20/07/2024"
+    }
+  ]
+}
